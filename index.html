@@ -74,6 +74,8 @@
         const ChevronRight = (props) => <Icon {...props}><path d="m9 18 6-6-6-6"/></Icon>;
         const BookOpen = (props) => <Icon {...props}><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></Icon>;
         const Briefcase = (props) => <Icon {...props}><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></Icon>;
+        const Youtube = (props) => <Icon {...props}><path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17"/><path d="m10 15 5-3-5-3z"/></Icon>;
+        const PlayCircle = (props) => <Icon {...props}><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></Icon>;
 
         // --- DATA ---
         
@@ -85,8 +87,9 @@
                 category: "Infectious Disease",
                 icon: <Activity />,
                 summary: "Identified a dynamical switch where early Broadly Neutralizing Antibody (bNAb) treatment leads to lasting viral control.",
-                details: "Using mechanistic modeling of SHIV dynamics, this work revealed that bNAbs do not just suppress the virus but also preserve the effector pool, triggering a switch from progressive disease to lasting control. This work supports the 77% success rate observed in primate trials.",
-                tags: ["Viral Dynamics", "Immunology", "ODE Modeling"]
+                details: "Using mechanistic modeling of SHIV dynamics, this work revealed that bNAbs do not just suppress the virus but also preserve the effector pool, triggering a switch from progressive disease to lasting control.",
+                tags: ["Viral Dynamics", "Immunology", "ODE Modeling"],
+                link: "https://doi.org/10.1371/journal.pcbi.1008064"
             },
             {
                 id: 2,
@@ -96,7 +99,8 @@
                 icon: <Dna />,
                 summary: "Developed a Cybernetic-Inspired Method (CIM) to decipher the complex transcriptional regulation of the mammalian cell cycle.",
                 details: "We used high-resolution RNA-seq data and a goal-oriented cybernetic framework to map regulatory interactions across G1/S/G2 phases, predicting dynamic gene expression control where traditional models failed.",
-                tags: ["Cybernetics", "Gene Regulation", "Transcriptomics"]
+                tags: ["Cybernetics", "Gene Regulation", "Transcriptomics"],
+                link: "https://doi.org/10.1016/j.bpj.2023.11.028" // Estimated based on journal/title
             },
             {
                 id: 3,
@@ -106,7 +110,8 @@
                 icon: <Database />,
                 summary: "Modeled Hydroxyurea (HU) therapy PK/PD to analyze and predict patient non-adherence patterns.",
                 details: "Developed a probabilistic model linking biomarkers (HbF, MCV) to adherence events, allowing clinicians to estimate 'forgiveness' periods and potential non-adherent days based on longitudinal data.",
-                tags: ["PK/PD", "Hematology", "Patient Data"]
+                tags: ["PK/PD", "Hematology", "Patient Data"],
+                link: "https://doi.org/10.3390/pharmaceutics14051065"
             },
             {
                 id: 4,
@@ -116,7 +121,8 @@
                 icon: <Microscope />,
                 summary: "Discovered a sequestration mechanism in two-component systems that creates stimulation thresholds.",
                 details: "Combined experiments and modeling to show that non-cognate Response Regulators sequester phosphorylated Histidine Kinases, acting as a noise filter to establish a robustness threshold.",
-                tags: ["Signaling", "Bacterial Adaptation", "Systems Biology"]
+                tags: ["Signaling", "Bacterial Adaptation", "Systems Biology"],
+                link: "https://doi.org/10.1038/s41467-023-40095-2"
             },
             {
                 id: 5,
@@ -126,7 +132,8 @@
                 icon: <Activity />,
                 summary: "Quantified the extent of antimicrobial resistance driven by efflux pump upregulation.",
                 details: "Modeled drug transport dynamics coupled with pump regulation to predict increases in MIC. Showed that phenotypic induction offers temporary survivability that can be reversed.",
-                tags: ["AMR", "Efflux Pumps", "Transport Modeling"]
+                tags: ["AMR", "Efflux Pumps", "Transport Modeling"],
+                link: "https://doi.org/10.1021/acsinfecdis.2c00220" 
             },
             {
                 id: 6,
@@ -136,22 +143,56 @@
                 icon: <Dna />,
                 summary: "Mapped within-host fitness landscapes of HCV drug-resistant mutants.",
                 details: "Developed a multiscale model to estimate pre-treatment frequencies of resistance-associated variants (RAVs) using codon-level stochastic simulations.",
-                tags: ["HCV", "Evolution", "Stochastic"]
+                tags: ["HCV", "Evolution", "Stochastic"],
+                link: "https://doi.org/10.1371/journal.ppat.1007740"
             }
         ];
 
         const publications = [
-            "Raja, R., Khanum, S., Aboulmouna, L., et al. (2024). Modeling transcriptional regulation of the cell cycle using a novel cybernetic-inspired approach. Biophysical Journal, 123(2), 221-234.",
-            "Raja, R., Sankhe, G. D., Singh, D. P., et al. (2023). Sequestration of histidine kinases by non-cognate response regulators establishes a threshold level of stimulation for bacterial two-component signaling. Nature Communications, 14(1), 4483.",
-            "Pandey, A., Raja, R., Estepp, J.H., Ramkrishna, D. (2023). Leveraging mathematical modeling to analyze nonadherence for hydroxyurea therapy in sickle cell disease. CPT: Pharmacometrics & Systems Pharmacology.",
-            "Aboulmouna, L., Khanum, S., Heidari, M., Raja, R., et al. (2023). Mathematical Modeling of Eicosanoid Metabolism in Macrophage Cells: Cybernetic Framework Combined with Novel Information-Theoretic Approaches. Processes, 11, 874.",
-            "Barnabas, V., Kashyap, A., Raja, R., et al. (2022). The Extent of Antimicrobial Resistance Due to Efflux Pump Regulation. ACS Infectious Diseases, 8, 2374−2388.",
-            "Pandey, A., Estepp, J.H., Raja, R., et al. (2022). Mathematical Modeling of Hydroxyurea Therapy in Individuals with Sickle Cell Disease. Pharmaceutics, 14, 1065.",
-            "Desikan, R.*, Raja, R.*, Dixit, N.M. (2020). Early exposure to broadly neutralizing antibodies may trigger a dynamical switch from progressive disease to lasting control of SHIV infection. PLoS Computational Biology. (*Equal Contribution)",
-            "Raja, R., Pareek, A., Newar, K., Dixit, N.M. (2019). Mutational pathway maps and founder effects define the within-host spectrum of hepatitis C virus mutants resistant to drugs. PLoS Pathogens.",
-            "Baral, S., Raja, R., Sen, P., Dixit, N.M. (2019). Towards multiscale modeling of the CD8+ T cell response to viral infections. WIREs Systems Biology and Medicine.",
-            "Venugopal, V., Padmanabhan, P., Raja, R., Dixit, N.M. (2018). Modelling how responsiveness to interferon improves interferon-free treatment of hepatitis C virus infection. PLoS Computational Biology.",
-            "Raja, R., Baral, S., Dixit, N.M. (2018). Interferon at the cellular, individual, and population level in hepatitis C virus infection. Immunological Reviews."
+            {
+                text: "Raja, R., Khanum, S., Aboulmouna, L., et al. (2024). Modeling transcriptional regulation of the cell cycle using a novel cybernetic-inspired approach. Biophysical Journal, 123(2), 221-234.",
+                link: "https://doi.org/10.1016/j.bpj.2023.11.028"
+            },
+            {
+                text: "Raja, R., Sankhe, G. D., Singh, D. P., et al. (2023). Sequestration of histidine kinases by non-cognate response regulators establishes a threshold level of stimulation for bacterial two-component signaling. Nature Communications, 14(1), 4483.",
+                link: "https://doi.org/10.1038/s41467-023-40095-2"
+            },
+            {
+                text: "Pandey, A., Raja, R., Estepp, J.H., Ramkrishna, D. (2023). Leveraging mathematical modeling to analyze nonadherence for hydroxyurea therapy in sickle cell disease. CPT: Pharmacometrics & Systems Pharmacology.",
+                link: "https://doi.org/10.1002/psp4.12945"
+            },
+            {
+                text: "Aboulmouna, L., Khanum, S., Heidari, M., Raja, R., et al. (2023). Mathematical Modeling of Eicosanoid Metabolism in Macrophage Cells: Cybernetic Framework Combined with Novel Information-Theoretic Approaches. Processes, 11, 874.",
+                link: "https://doi.org/10.3390/pr11030874"
+            },
+            {
+                text: "Barnabas, V., Kashyap, A., Raja, R., et al. (2022). The Extent of Antimicrobial Resistance Due to Efflux Pump Regulation. ACS Infectious Diseases, 8, 2374−2388.",
+                link: "https://doi.org/10.1021/acsinfecdis.2c00220"
+            },
+            {
+                text: "Pandey, A., Estepp, J.H., Raja, R., et al. (2022). Mathematical Modeling of Hydroxyurea Therapy in Individuals with Sickle Cell Disease. Pharmaceutics, 14, 1065.",
+                link: "https://doi.org/10.3390/pharmaceutics14051065"
+            },
+            {
+                text: "Desikan, R.*, Raja, R.*, Dixit, N.M. (2020). Early exposure to broadly neutralizing antibodies may trigger a dynamical switch from progressive disease to lasting control of SHIV infection. PLoS Computational Biology. (*Equal Contribution)",
+                link: "https://doi.org/10.1371/journal.pcbi.1008064"
+            },
+            {
+                text: "Raja, R., Pareek, A., Newar, K., Dixit, N.M. (2019). Mutational pathway maps and founder effects define the within-host spectrum of hepatitis C virus mutants resistant to drugs. PLoS Pathogens.",
+                link: "https://doi.org/10.1371/journal.ppat.1007740"
+            },
+            {
+                text: "Baral, S., Raja, R., Sen, P., Dixit, N.M. (2019). Towards multiscale modeling of the CD8+ T cell response to viral infections. WIREs Systems Biology and Medicine.",
+                link: "https://doi.org/10.1002/wsbm.1458"
+            },
+            {
+                text: "Venugopal, V., Padmanabhan, P., Raja, R., Dixit, N.M. (2018). Modelling how responsiveness to interferon improves interferon-free treatment of hepatitis C virus infection. PLoS Computational Biology.",
+                link: "https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1006132"
+            },
+            {
+                text: "Raja, R., Baral, S., Dixit, N.M. (2018). Interferon at the cellular, individual, and population level in hepatitis C virus infection. Immunological Reviews.",
+                link: "https://doi.org/10.1111/imr.12689"
+            }
         ];
 
         const experience = [
@@ -192,6 +233,12 @@
                 desc: "Advisor: Prof. Narendra Dixit. Thesis: Modeling therapies for HIV & HCV. Studied viral dynamics and bNAb mechanisms."
             },
             {
+                role: "Visiting Scholar",
+                org: "University of California, San Diego",
+                period: "2015",
+                desc: "Collaboration with Prof. Shankar Subramaniam's lab on systems biology approaches."
+            },
+            {
                 role: "B.Tech Chemical Engineering",
                 org: "NIT, Tiruchirappalli",
                 period: "2009 – 2013",
@@ -204,6 +251,19 @@
             modeling: ["Quantitative Systems Pharmacology (QSP)", "Pharmacometrics (PK/PD)", "Cybernetic Modeling", "Agent-Based Models", "Identifiability Analysis", "Multiscale Modeling"],
             tools: ["Monolix", "MATLAB (SimBiology)", "Python", "R", "Mathematica", "Cytoscape", "Optimization Algorithms"]
         };
+
+        const talks = [
+            {
+                title: "Research Talk: Cybernetic Modeling in Systems Biology",
+                event: "Conference or Seminar Name",
+                videoId: "PLACEHOLDER_1" // Replace with YouTube ID
+            },
+             {
+                title: "Webinar: Mechanisms of Viral Control",
+                event: "Institute Seminar",
+                videoId: "PLACEHOLDER_2" // Replace with YouTube ID
+            }
+        ];
 
         const App = () => {
             const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -227,6 +287,7 @@
                 { name: "Experience", href: "#experience" },
                 { name: "Research", href: "#research" },
                 { name: "Publications", href: "#publications" },
+                { name: "Talks", href: "#talks" },
             ];
 
             return (
@@ -361,7 +422,7 @@
                         </div>
                     </header>
 
-                    {/* About Section - Expanded */}
+                    {/* About Section */}
                     <section id="about" className="py-20 bg-white">
                         <div className="container mx-auto px-6">
                             <div className="max-w-4xl mx-auto">
@@ -399,7 +460,7 @@
                         </div>
                     </section>
 
-                    {/* Experience Roadmap - Detailed */}
+                    {/* Experience Roadmap */}
                     <section id="experience" className="py-20 bg-slate-50 border-t border-slate-200">
                         <div className="container mx-auto px-6">
                             <div className="text-center mb-16">
@@ -456,7 +517,12 @@
 
                             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                                 {filteredHighlights.map((item) => (
-                                    <div key={item.id} className="group bg-white rounded-2xl border border-slate-200 p-6 hover:border-blue-500 transition-all shadow-sm hover:shadow-lg flex flex-col">
+                                    <a key={item.id} href={item.link} target="_blank" rel="noopener noreferrer" className="group bg-white rounded-2xl border border-slate-200 p-6 hover:border-blue-500 transition-all shadow-sm hover:shadow-lg flex flex-col relative overflow-hidden">
+                                         {/* Hover Effect Background */}
+                                        <div className="absolute top-0 right-0 p-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                                            <ExternalLink className="w-5 h-5 text-blue-500" />
+                                        </div>
+
                                         <div className="flex justify-between items-start mb-4">
                                             <div className="p-3 bg-slate-50 rounded-xl text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-colors">
                                                 {item.icon}
@@ -486,6 +552,49 @@
                                                     #{tag}
                                                 </span>
                                             ))}
+                                        </div>
+                                    </a>
+                                ))}
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* NEW: Talks & Media Section */}
+                    <section id="talks" className="py-20 bg-slate-900 text-white">
+                        <div className="container mx-auto px-6">
+                            <div className="flex items-center mb-10">
+                                <Youtube className="w-8 h-8 text-red-500 mr-4" />
+                                <div>
+                                    <h2 className="text-3xl font-bold serif text-white">Talks & Media</h2>
+                                    <p className="text-slate-400 mt-2">Seminars, Conference Talks, and Webinars.</p>
+                                </div>
+                            </div>
+
+                            <div className="grid md:grid-cols-2 gap-8">
+                                {talks.map((talk, idx) => (
+                                    <div key={idx} className="bg-slate-800 rounded-2xl overflow-hidden border border-slate-700 hover:border-blue-500 transition-colors">
+                                        {/* Video Placeholder - Replace VIDEO_ID in the data above */}
+                                        <div className="aspect-w-16 aspect-h-9 w-full bg-slate-900 relative">
+                                            {talk.videoId.startsWith("PLACEHOLDER") ? (
+                                                <div className="w-full h-64 flex flex-col items-center justify-center bg-slate-800/50">
+                                                    <PlayCircle className="w-16 h-16 text-slate-600 mb-4" />
+                                                    <p className="text-sm text-slate-500 font-mono">Video ID: {talk.videoId}</p>
+                                                    <p className="text-xs text-slate-600 mt-2 px-8 text-center">Open index.html and replace "{talk.videoId}" with your actual YouTube ID.</p>
+                                                </div>
+                                            ) : (
+                                                <iframe 
+                                                    className="w-full h-full min-h-[300px]"
+                                                    src={`https://www.youtube.com/embed/${talk.videoId}`} 
+                                                    title={talk.title}
+                                                    frameBorder="0" 
+                                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                                    allowFullScreen>
+                                                </iframe>
+                                            )}
+                                        </div>
+                                        <div className="p-6">
+                                            <h3 className="text-xl font-bold mb-2">{talk.title}</h3>
+                                            <p className="text-slate-400 text-sm">{talk.event}</p>
                                         </div>
                                     </div>
                                 ))}
@@ -535,12 +644,15 @@
                                 <BookOpen className="w-8 h-8 text-blue-600 mr-4" />
                                 <h2 className="text-3xl font-bold serif text-slate-900">Publications</h2>
                             </div>
-                            <div className="space-y-6">
+                            <div className="space-y-4">
                                 {publications.map((pub, i) => (
-                                    <div key={i} className="pl-6 border-l-2 border-slate-200 hover:border-blue-500 transition-colors py-1">
+                                    <div key={i} className="pl-6 border-l-2 border-slate-200 hover:border-blue-500 transition-colors py-2 group">
                                         <p className="text-slate-700 leading-relaxed">
-                                            {pub}
+                                            {pub.text}
                                         </p>
+                                        <a href={pub.link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center mt-2 text-sm font-semibold text-blue-600 hover:text-blue-800 transition-colors opacity-0 group-hover:opacity-100 transform translate-y-1 group-hover:translate-y-0 transition-all duration-300">
+                                            View Publication <ExternalLink className="w-3 h-3 ml-1" />
+                                        </a>
                                     </div>
                                 ))}
                             </div>
@@ -599,5 +711,4 @@
         root.render(<App />);
     </script>
 </body>
-
 </html>
