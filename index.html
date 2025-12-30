@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO & Identity -->
+    <title>Rubesh Raja, Ph.D. | QSP & Mechanistic Modeler</title>
+    <meta name="description" content="Portfolio of Dr. Rubesh Raja, Scientist II at Vantage Research. Specializing in Quantitative Systems Pharmacology (QSP), Cybernetic Modeling, and Infectious Disease Dynamics.">
+    <meta name="keywords" content="Rubesh Raja, QSP, Mathematical Modeling, Systems Biology, Pharmacometrics, HIV, HCV, Vantage Research">
+    <meta name="author" content="Rubesh Raja">
+    
+    <!-- Social Media / LinkedIn Preview -->
+    <meta property="og:title" content="Rubesh Raja, Ph.D. | QSP & Mechanistic Modeler">
+    <meta property="og:description" content="Scientist II at Vantage Research. Bridging molecular mechanisms and clinical outcomes using mathematical modeling.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://rubeshraja.github.io/portfolio">
+    
+    <!-- Dynamic Favicon (DNA Helix) -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧬</text></svg>">
+
+    <!-- Libraries -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+        h1, h2, h3, .serif {
+            font-family: 'Merriweather', serif;
+        }
+        .gradient-text {
+            background: linear-gradient(to right, #2563eb, #0891b2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .fade-in {
+            animation: fadeIn 0.8s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        // --- ICONS ---
+        const Icon = ({ children, className, ...props }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} {...props}>{children}</svg>
+        );
+        const Activity = (props) => <Icon {...props}><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></Icon>;
+        const Dna = (props) => <Icon {...props}><path d="M2 15c6.667-6 13.333 0 20-6"/><path d="M9 22c1.798-1.998 2.518-3.995 2.807-5.993"/><path d="M15 2c-1.798 1.998-2.518 3.995-2.807 5.993"/><path d="M17 12a5 5 0 1 1-10 0 5 5 0 0 1 10 0Z"/></Icon>;
+        const Brain = (props) => <Icon {...props}><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z"/><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z"/></Icon>;
+        const Database = (props) => <Icon {...props}><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></Icon>;
+        const Microscope = (props) => <Icon {...props}><path d="M6 18h8"/><path d="M3 22h18"/><path d="M14 22a7 7 0 1 0 0-14h-1"/><path d="M9 14h2"/><path d="M9 12a2 2 0 0 1-2-2V6h6v4a2 2 0 0 1-2 2Z"/><path d="M12 6V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3"/></Icon>;
+        const Award = (props) => <Icon {...props}><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></Icon>;
+        const FileText = (props) => <Icon {...props}><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></Icon>;
+        const Mail = (props) => <Icon {...props}><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></Icon>;
+        const Linkedin = (props) => <Icon {...props}><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></Icon>;
+        const ExternalLink = (props) => <Icon {...props}><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></Icon>;
+        const Menu = (props) => <Icon {...props}><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></Icon>;
+        const X = (props) => <Icon {...props}><path d="M18 6 6 18"/><path d="m6 6 12 12"/></Icon>;
+        const ChevronRight = (props) => <Icon {...props}><path d="m9 18 6-6-6-6"/></Icon>;
+        const BookOpen = (props) => <Icon {...props}><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></Icon>;
+        const Briefcase = (props) => <Icon {...props}><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></Icon>;
+
+        // --- DATA ---
+        
+        const highlights = [
+            {
+                id: 1,
+                title: "HIV-1 Remission & bNAbs",
+                journal: "PLoS Comp. Bio (2020)",
+                category: "Infectious Disease",
+                icon: <Activity />,
+                summary: "Identified a dynamical switch where early Broadly Neutralizing Antibody (bNAb) treatment leads to lasting viral control.",
+                details: "Using mechanistic modeling of SHIV dynamics, this work revealed that bNAbs do not just suppress the virus but also preserve the effector pool, triggering a switch from progressive disease to lasting control. This work supports the 77% success rate observed in primate trials.",
+                tags: ["Viral Dynamics", "Immunology", "ODE Modeling"]
+            },
+            {
+                id: 2,
+                title: "Cell Cycle Regulation",
+                journal: "Biophysical Journal (2024)",
+                category: "Basic Biology",
+                icon: <Dna />,
+                summary: "Developed a Cybernetic-Inspired Method (CIM) to decipher the complex transcriptional regulation of the mammalian cell cycle.",
+                details: "We used high-resolution RNA-seq data and a goal-oriented cybernetic framework to map regulatory interactions across G1/S/G2 phases, predicting dynamic gene expression control where traditional models failed.",
+                tags: ["Cybernetics", "Gene Regulation", "Transcriptomics"]
+            },
+            {
+                id: 3,
+                title: "Sickle Cell Non-Adherence",
+                journal: "CPT & Pharmaceutics (2022/23)",
+                category: "Clinical Pharmacology",
+                icon: <Database />,
+                summary: "Modeled Hydroxyurea (HU) therapy PK/PD to analyze and predict patient non-adherence patterns.",
+                details: "Developed a probabilistic model linking biomarkers (HbF, MCV) to adherence events, allowing clinicians to estimate 'forgiveness' periods and potential non-adherent days based on longitudinal data.",
+                tags: ["PK/PD", "Hematology", "Patient Data"]
+            },
+            {
+                id: 4,
+                title: "Bacterial Signaling Thresholds",
+                journal: "Nature Communications (2023)",
+                category: "Bacterial Systems",
+                icon: <Microscope />,
+                summary: "Discovered a sequestration mechanism in two-component systems that creates stimulation thresholds.",
+                details: "Combined experiments and modeling to show that non-cognate Response Regulators sequester phosphorylated Histidine Kinases, acting as a noise filter to establish a robustness threshold.",
+                tags: ["Signaling", "Bacterial Adaptation", "Systems Biology"]
+            },
+            {
+                id: 5,
+                title: "AMR & Efflux Pumps",
+                journal: "ACS Infect. Dis. (2022)",
+                category: "Bacterial Systems",
+                icon: <Activity />,
+                summary: "Quantified the extent of antimicrobial resistance driven by efflux pump upregulation.",
+                details: "Modeled drug transport dynamics coupled with pump regulation to predict increases in MIC. Showed that phenotypic induction offers temporary survivability that can be reversed.",
+                tags: ["AMR", "Efflux Pumps", "Transport Modeling"]
+            },
+            {
+                id: 6,
+                title: "HCV Mutational Pathways",
+                journal: "PLoS Pathogens (2019)",
+                category: "Infectious Disease",
+                icon: <Dna />,
+                summary: "Mapped within-host fitness landscapes of HCV drug-resistant mutants.",
+                details: "Developed a multiscale model to estimate pre-treatment frequencies of resistance-associated variants (RAVs) using codon-level stochastic simulations.",
+                tags: ["HCV", "Evolution", "Stochastic"]
+            }
+        ];
+
+        const publications = [
+            "Raja, R., Khanum, S., Aboulmouna, L., et al. (2024). Modeling transcriptional regulation of the cell cycle using a novel cybernetic-inspired approach. Biophysical Journal, 123(2), 221-234.",
+            "Raja, R., Sankhe, G. D., Singh, D. P., et al. (2023). Sequestration of histidine kinases by non-cognate response regulators establishes a threshold level of stimulation for bacterial two-component signaling. Nature Communications, 14(1), 4483.",
+            "Pandey, A., Raja, R., Estepp, J.H., Ramkrishna, D. (2023). Leveraging mathematical modeling to analyze nonadherence for hydroxyurea therapy in sickle cell disease. CPT: Pharmacometrics & Systems Pharmacology.",
+            "Aboulmouna, L., Khanum, S., Heidari, M., Raja, R., et al. (2023). Mathematical Modeling of Eicosanoid Metabolism in Macrophage Cells: Cybernetic Framework Combined with Novel Information-Theoretic Approaches. Processes, 11, 874.",
+            "Barnabas, V., Kashyap, A., Raja, R., et al. (2022). The Extent of Antimicrobial Resistance Due to Efflux Pump Regulation. ACS Infectious Diseases, 8, 2374−2388.",
+            "Pandey, A., Estepp, J.H., Raja, R., et al. (2022). Mathematical Modeling of Hydroxyurea Therapy in Individuals with Sickle Cell Disease. Pharmaceutics, 14, 1065.",
+            "Desikan, R.*, Raja, R.*, Dixit, N.M. (2020). Early exposure to broadly neutralizing antibodies may trigger a dynamical switch from progressive disease to lasting control of SHIV infection. PLoS Computational Biology. (*Equal Contribution)",
+            "Raja, R., Pareek, A., Newar, K., Dixit, N.M. (2019). Mutational pathway maps and founder effects define the within-host spectrum of hepatitis C virus mutants resistant to drugs. PLoS Pathogens.",
+            "Baral, S., Raja, R., Sen, P., Dixit, N.M. (2019). Towards multiscale modeling of the CD8+ T cell response to viral infections. WIREs Systems Biology and Medicine.",
+            "Venugopal, V., Padmanabhan, P., Raja, R., Dixit, N.M. (2018). Modelling how responsiveness to interferon improves interferon-free treatment of hepatitis C virus infection. PLoS Computational Biology.",
+            "Raja, R., Baral, S., Dixit, N.M. (2018). Interferon at the cellular, individual, and population level in hepatitis C virus infection. Immunological Reviews."
+        ];
+
+        const experience = [
+            {
+                role: "Scientist II",
+                org: "Vantage Research, Chennai",
+                period: "Oct 2025 – Present",
+                desc: "QSP & PBPK Modeling, SimBiology, Translational Therapeutics. Working on model-informed drug development strategies."
+            },
+            {
+                role: "Career Break / Paternity",
+                org: "Personal",
+                period: "2024 – 2025",
+                desc: "Focused on family, mentorship, and reflection. Deepened appreciation for sustainable, collaborative science and work-life balance."
+            },
+            {
+                role: "Postdoctoral Research Associate",
+                org: "Purdue University (Food Science)",
+                period: "2023 – 2024",
+                desc: "Advisor: Prof. Stephen R. Lindemann. Developed cybernetic models to explore dietary fiber impact on synthetic fecal microbiome communities."
+            },
+            {
+                role: "Postdoctoral Research Associate",
+                org: "Purdue University (Chemical Engg.)",
+                period: "2019 – 2023",
+                desc: "Advisor: Prof. Doraiswami Ramkrishna. Focused on Cybernetic models for metabolic regulation (Eicosanoids, Cell Cycle) and therapeutic optimization (Sickle Cell)."
+            },
+            {
+                role: "Research Associate",
+                org: "IISc, Bangalore",
+                period: "2018 – 2019",
+                desc: "Mechanistic modeling of viral infections and immune responses."
+            },
+            {
+                role: "Ph.D. (Integrated M.Sc. Engg.)",
+                org: "IISc, Bangalore",
+                period: "2013 – 2018",
+                desc: "Advisor: Prof. Narendra Dixit. Thesis: Modeling therapies for HIV & HCV. Studied viral dynamics and bNAb mechanisms."
+            },
+            {
+                role: "Visiting Scholar",
+                org: "University of California, San Diego",
+                period: "2015",
+                desc: "Collaboration with Prof. Shankar Subramaniam's lab on systems biology approaches."
+            },
+            {
+                role: "B.Tech Chemical Engineering",
+                org: "NIT, Tiruchirappalli",
+                period: "2009 – 2013",
+                desc: "Foundational training in engineering principles and mathematical modeling."
+            }
+        ];
+
+        const skills = {
+            domains: ["Infectious Diseases (HIV, HCV)", "Sickle Cell Disease", "Immunology (T-cells, Interferons)", "Metabolic Regulation (Eicosanoids)", "Microbiome & Synthetic Communities", "Antimicrobial Resistance"],
+            modeling: ["Quantitative Systems Pharmacology (QSP)", "Pharmacometrics (PK/PD)", "Cybernetic Modeling", "Agent-Based Models", "Identifiability Analysis", "Multiscale Modeling"],
+            tools: ["Monolix", "MATLAB (SimBiology)", "Python", "R", "Mathematica", "Cytoscape", "Optimization Algorithms"]
+        };
+
+        const App = () => {
+            const [isMenuOpen, setIsMenuOpen] = useState(false);
+            const [activeTab, setActiveTab] = useState("All");
+            const [scrolled, setScrolled] = useState(false);
+
+            useEffect(() => {
+                const handleScroll = () => {
+                    setScrolled(window.scrollY > 50);
+                };
+                window.addEventListener('scroll', handleScroll);
+                return () => window.removeEventListener('scroll', handleScroll);
+            }, []);
+
+            const filteredHighlights = activeTab === "All" 
+                ? highlights 
+                : highlights.filter(item => item.category === activeTab);
+
+            const navLinks = [
+                { name: "About", href: "#about" },
+                { name: "Experience", href: "#experience" },
+                { name: "Research", href: "#research" },
+                { name: "Publications", href: "#publications" },
+            ];
+
+            return (
+                <div className="min-h-screen flex flex-col">
+                    
+                    {/* Navigation */}
+                    <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'bg-white/95 backdrop-blur-md shadow-sm py-4' : 'bg-transparent py-6'}`}>
+                        <div className="container mx-auto px-6 flex justify-between items-center">
+                            <a href="#" className="text-2xl font-bold tracking-tight text-slate-900 font-serif">
+                                Rubesh<span className="text-blue-600">Raja</span>, Ph.D.
+                            </a>
+
+                            {/* Desktop Nav */}
+                            <div className="hidden md:flex space-x-8">
+                                {navLinks.map((link) => (
+                                    <a 
+                                        key={link.name} 
+                                        href={link.href} 
+                                        className="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors uppercase tracking-wider"
+                                    >
+                                        {link.name}
+                                    </a>
+                                ))}
+                                <a href="#contact" className="px-4 py-2 text-sm font-bold text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors">
+                                    Contact
+                                </a>
+                            </div>
+
+                            {/* Mobile Nav Button */}
+                            <button 
+                                className="md:hidden text-slate-800"
+                                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                            >
+                                {isMenuOpen ? <X /> : <Menu />}
+                            </button>
+                        </div>
+
+                        {/* Mobile Menu */}
+                        {isMenuOpen && (
+                            <div className="md:hidden absolute top-full left-0 w-full bg-white shadow-lg py-6 px-6 flex flex-col space-y-4 border-t border-slate-100">
+                                {navLinks.map((link) => (
+                                    <a 
+                                        key={link.name} 
+                                        href={link.href} 
+                                        className="text-lg font-medium text-slate-800"
+                                        onClick={() => setIsMenuOpen(false)}
+                                    >
+                                        {link.name}
+                                    </a>
+                                ))}
+                            </div>
+                        )}
+                    </nav>
+
+                    {/* Hero Section */}
+                    <header className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 px-6 overflow-hidden bg-slate-50">
+                        <div className="absolute inset-0 z-0 opacity-10">
+                             <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+                                <path d="M0 100 C 20 0 50 0 100 100 Z" fill="url(#gradient)" />
+                                <defs>
+                                    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                        <stop offset="0%" stopColor="#2563eb" />
+                                        <stop offset="100%" stopColor="#0891b2" />
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                        </div>
+
+                        <div className="container mx-auto relative z-10 grid md:grid-cols-2 gap-12 items-center">
+                            <div className="fade-in">
+                                <div className="inline-flex items-center px-3 py-1 rounded-full bg-blue-100 text-blue-800 text-xs font-bold uppercase tracking-wide mb-6">
+                                    Quantitative Systems Pharmacologist
+                                </div>
+                                <h1 className="text-5xl lg:text-6xl font-bold leading-tight mb-6 text-slate-900 serif">
+                                    Decoding Biology with <span className="gradient-text">Mathematics</span>
+                                </h1>
+                                <p className="text-lg text-slate-600 mb-8 leading-relaxed max-w-xl">
+                                    From molecular mechanisms to clinical outcomes. I build predictive models for infectious diseases, metabolic regulation, and therapeutic optimization.
+                                </p>
+                                <div className="flex flex-wrap gap-4">
+                                    <a href="#research" className="px-8 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors shadow-lg shadow-blue-500/30">
+                                        Explore Work
+                                    </a>
+                                    <a href="#about" className="px-8 py-3 border border-slate-300 bg-white text-slate-700 rounded-lg font-semibold hover:bg-slate-50 transition-colors flex items-center">
+                                        About Me <ChevronRight className="ml-2 w-4 h-4" />
+                                    </a>
+                                </div>
+                            </div>
+                            
+                            {/* Visual Abstract */}
+                            <div className="relative hidden md:block fade-in" style={{animationDelay: '0.2s'}}>
+                                <div className="w-full h-96 bg-gradient-to-tr from-white to-blue-50 rounded-2xl border border-slate-200 shadow-xl flex items-center justify-center relative overflow-hidden p-8">
+                                    <div className="absolute top-0 right-0 w-64 h-64 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse"></div>
+                                    <div className="absolute bottom-0 left-0 w-64 h-64 bg-cyan-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse" style={{animationDelay: '1s'}}></div>
+                                    
+                                    <div className="grid grid-cols-2 gap-4 z-10 w-full">
+                                        <div className="bg-white p-5 rounded-xl shadow-sm border border-slate-100 transform translate-y-4">
+                                            <div className="flex items-center space-x-2 text-blue-600 mb-2">
+                                                <Activity size={20} />
+                                                <span className="font-bold text-sm">PK/PD</span>
+                                            </div>
+                                            <div className="space-y-2">
+                                                <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden"><div className="h-full w-3/4 bg-blue-500"></div></div>
+                                                <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden"><div className="h-full w-1/2 bg-blue-400"></div></div>
+                                            </div>
+                                        </div>
+                                        <div className="bg-white p-5 rounded-xl shadow-sm border border-slate-100 transform -translate-y-4">
+                                            <div className="flex items-center space-x-2 text-cyan-600 mb-2">
+                                                <Dna size={20} />
+                                                <span className="font-bold text-sm">Omics Data</span>
+                                            </div>
+                                            <div className="grid grid-cols-4 gap-1">
+                                                {[...Array(8)].map((_,i) => <div key={i} className={`h-4 rounded-sm ${i%2===0 ? 'bg-cyan-100' : 'bg-cyan-500'}`}></div>)}
+                                            </div>
+                                        </div>
+                                         <div className="bg-white p-5 rounded-xl shadow-sm border border-slate-100 col-span-2">
+                                            <div className="flex items-center space-x-2 text-indigo-600 mb-2">
+                                                <Brain size={20} />
+                                                <span className="font-bold text-sm">Translational Insight</span>
+                                            </div>
+                                            <div className="flex justify-between items-center text-xs text-slate-400 font-mono mt-2">
+                                                 <span>Input</span>
+                                                 <span className="flex-1 border-t border-dashed border-slate-300 mx-2"></span>
+                                                 <span className="px-2 py-1 bg-indigo-100 text-indigo-700 rounded">Model</span>
+                                                 <span className="flex-1 border-t border-dashed border-slate-300 mx-2"></span>
+                                                 <span>Outcome</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </header>
+
+                    {/* About Section - Expanded */}
+                    <section id="about" className="py-20 bg-white">
+                        <div className="container mx-auto px-6">
+                            <div className="max-w-4xl mx-auto">
+                                <h2 className="text-3xl font-bold mb-8 serif text-slate-900">About Me</h2>
+                                <div className="prose prose-lg text-slate-600">
+                                    <p className="mb-6">
+                                        I am a Scientist II at <strong>Vantage Research</strong> (Chennai), specializing in Quantitative Systems Pharmacology (QSP). My work bridges the gap between molecular mechanisms and clinical trial outcomes.
+                                    </p>
+                                    <p className="mb-6">
+                                        With a Ph.D. from the <strong>Indian Institute of Science (IISc)</strong> and extensive postdoctoral training at <strong>Purdue University</strong>, I have developed models ranging from viral dynamics (HIV, HCV) to metabolic regulation and synthetic microbiomes. My philosophy is grounded in using mathematics not just to fit data, but to uncover the causal structures of biological systems.
+                                    </p>
+                                    
+                                    <div className="grid md:grid-cols-2 gap-8 my-10">
+                                        <div className="bg-blue-50 p-6 rounded-xl border border-blue-100">
+                                            <h3 className="font-bold text-slate-800 mb-3 flex items-center">
+                                                <Award className="w-5 h-5 mr-2 text-blue-600"/> 
+                                                Sustainable Science
+                                            </h3>
+                                            <p className="text-sm">
+                                                "After a rewarding paternity break where I embraced fatherhood, I returned to research with a fresh perspective. I am deeply committed to sustainable science, mentorship, and the belief that work-life balance drives better innovation."
+                                            </p>
+                                        </div>
+                                        <div className="bg-indigo-50 p-6 rounded-xl border border-indigo-100">
+                                            <h3 className="font-bold text-slate-800 mb-3 flex items-center">
+                                                <Brain className="w-5 h-5 mr-2 text-indigo-600"/> 
+                                                Future Directions
+                                            </h3>
+                                            <p className="text-sm">
+                                                I aim to expand my work into <strong>Personalized Medicine</strong> and <strong>Digital Twins</strong>, integrating machine learning and multi-omics data to enable real-time therapeutic decision-making.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Experience Roadmap - Detailed */}
+                    <section id="experience" className="py-20 bg-slate-50 border-t border-slate-200">
+                        <div className="container mx-auto px-6">
+                            <div className="text-center mb-16">
+                                <h2 className="text-3xl font-bold mb-4 serif text-slate-900">Experience Roadmap</h2>
+                                <p className="text-slate-600">A journey through engineering, systems biology, and pharmacology.</p>
+                            </div>
+                            
+                            <div className="max-w-4xl mx-auto space-y-8 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-slate-300 before:to-transparent">
+                                {experience.map((job, index) => (
+                                    <div key={index} className={`relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group ${index === 0 ? 'is-active' : ''}`}>
+                                        <div className={`flex items-center justify-center w-10 h-10 rounded-full border border-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 ${index === 0 ? 'bg-blue-600 text-white' : 'bg-white text-slate-400'}`}>
+                                            <Briefcase size={16} />
+                                        </div>
+                                        <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                                            <div className="flex flex-col sm:flex-row justify-between items-start mb-2">
+                                                <h3 className="font-bold text-slate-900">{job.role}</h3>
+                                                <span className="text-xs font-mono text-blue-600 bg-blue-50 px-2 py-1 rounded mt-1 sm:mt-0 whitespace-nowrap">{job.period}</span>
+                                            </div>
+                                            <p className="text-sm font-semibold text-slate-600 mb-2">{job.org}</p>
+                                            <p className="text-sm text-slate-500 leading-relaxed">{job.desc}</p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Research Case Studies */}
+                    <section id="research" className="py-20 bg-white">
+                        <div className="container mx-auto px-6">
+                            <div className="flex flex-col md:flex-row justify-between items-end mb-12">
+                                <div>
+                                    <h2 className="text-3xl font-bold mb-4 serif text-slate-900">Key Projects</h2>
+                                    <p className="text-slate-600 max-w-xl">
+                                        Selected works demonstrating the application of mechanistic modeling to real-world biological problems.
+                                    </p>
+                                </div>
+                                <div className="mt-6 md:mt-0 flex flex-wrap gap-2">
+                                    {["All", "Infectious Disease", "Basic Biology", "Clinical Pharmacology", "Bacterial Systems"].map(tab => (
+                                        <button 
+                                            key={tab}
+                                            onClick={() => setActiveTab(tab)}
+                                            className={`px-4 py-2 text-sm font-medium rounded-full transition-colors ${
+                                                activeTab === tab 
+                                                ? 'bg-slate-900 text-white' 
+                                                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                                            }`}
+                                        >
+                                            {tab}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                                {filteredHighlights.map((item) => (
+                                    <div key={item.id} className="group bg-white rounded-2xl border border-slate-200 p-6 hover:border-blue-500 transition-all shadow-sm hover:shadow-lg flex flex-col">
+                                        <div className="flex justify-between items-start mb-4">
+                                            <div className="p-3 bg-slate-50 rounded-xl text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                                                {item.icon}
+                                            </div>
+                                            <span className="px-2 py-1 bg-slate-100 text-slate-600 text-[10px] font-bold uppercase rounded-full tracking-wider">
+                                                {item.category}
+                                            </span>
+                                        </div>
+                                        
+                                        <h3 className="text-xl font-bold mb-2 text-slate-900 group-hover:text-blue-600 transition-colors">
+                                            {item.title}
+                                        </h3>
+                                        <p className="text-xs font-semibold text-slate-500 mb-4 font-mono">
+                                            {item.journal}
+                                        </p>
+                                        
+                                        <p className="text-slate-700 font-medium text-sm mb-3">
+                                            {item.summary}
+                                        </p>
+                                        <p className="text-slate-500 text-sm leading-relaxed mb-6 flex-grow">
+                                            {item.details}
+                                        </p>
+
+                                        <div className="flex flex-wrap gap-2 pt-4 border-t border-slate-100">
+                                            {item.tags.map(tag => (
+                                                <span key={tag} className="px-2 py-1 bg-slate-50 text-slate-500 text-xs rounded border border-slate-100">
+                                                    #{tag}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Skills Matrix */}
+                    <section className="py-20 bg-slate-50 border-y border-slate-200">
+                        <div className="container mx-auto px-6">
+                             <div className="text-center mb-12">
+                                <h2 className="text-3xl font-bold mb-4 serif text-slate-900">Technical Expertise</h2>
+                            </div>
+                            <div className="grid md:grid-cols-3 gap-8">
+                                <div className="bg-white p-8 rounded-xl shadow-sm border border-slate-100">
+                                    <h3 className="text-lg font-bold mb-4 flex items-center text-slate-900"><Database className="mr-2 text-blue-500" size={20}/> Tools</h3>
+                                    <ul className="space-y-2">
+                                        {skills.tools.map(tool => (
+                                            <li key={tool} className="text-sm text-slate-600 flex items-start"><span className="mr-2 text-blue-400">•</span> {tool}</li>
+                                        ))}
+                                    </ul>
+                                </div>
+                                <div className="bg-white p-8 rounded-xl shadow-sm border border-slate-100">
+                                    <h3 className="text-lg font-bold mb-4 flex items-center text-slate-900"><Brain className="mr-2 text-cyan-500" size={20}/> Methodologies</h3>
+                                    <ul className="space-y-2">
+                                        {skills.modeling.map(method => (
+                                            <li key={method} className="text-sm text-slate-600 flex items-start"><span className="mr-2 text-cyan-400">•</span> {method}</li>
+                                        ))}
+                                    </ul>
+                                </div>
+                                <div className="bg-white p-8 rounded-xl shadow-sm border border-slate-100">
+                                    <h3 className="text-lg font-bold mb-4 flex items-center text-slate-900"><Microscope className="mr-2 text-indigo-500" size={20}/> Domains</h3>
+                                    <ul className="space-y-2">
+                                        {skills.domains.map(domain => (
+                                            <li key={domain} className="text-sm text-slate-600 flex items-start"><span className="mr-2 text-indigo-400">•</span> {domain}</li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Full Publications List */}
+                    <section id="publications" className="py-20 bg-white">
+                        <div className="container mx-auto px-6 max-w-5xl">
+                            <div className="flex items-center mb-10">
+                                <BookOpen className="w-8 h-8 text-blue-600 mr-4" />
+                                <h2 className="text-3xl font-bold serif text-slate-900">Publications</h2>
+                            </div>
+                            <div className="space-y-6">
+                                {publications.map((pub, i) => (
+                                    <div key={i} className="pl-6 border-l-2 border-slate-200 hover:border-blue-500 transition-colors py-1">
+                                        <p className="text-slate-700 leading-relaxed">
+                                            {pub}
+                                        </p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Contact / Footer */}
+                    <footer id="contact" className="bg-slate-900 text-slate-300 py-16 mt-auto">
+                        <div className="container mx-auto px-6">
+                            <div className="grid md:grid-cols-2 gap-12">
+                                <div>
+                                    <h2 className="text-3xl font-bold text-white mb-6 serif">Let's Collaborate</h2>
+                                    <p className="mb-8 leading-relaxed text-slate-400">
+                                        I am always open to discussing model-informed drug development, systems biology collaborations, or mentorship opportunities.
+                                    </p>
+                                    <div className="flex space-x-6">
+                                        <a href="https://linkedin.com" target="_blank" className="text-slate-400 hover:text-white transition-colors">
+                                            <Linkedin size={28} />
+                                        </a>
+                                        <a href="mailto:rubeshr1991@gmail.com" className="text-slate-400 hover:text-white transition-colors">
+                                            <Mail size={28} />
+                                        </a>
+                                        <a href="https://sites.google.com/view/rubesh-raja/home" target="_blank" className="text-slate-400 hover:text-white transition-colors">
+                                            <ExternalLink size={28} />
+                                        </a>
+                                    </div>
+                                </div>
+                                <div className="bg-slate-800 p-8 rounded-2xl border border-slate-700">
+                                    <h3 className="text-xl font-bold text-white mb-4">Contact Info</h3>
+                                    <div className="space-y-4">
+                                        <div className="flex items-center">
+                                            <Mail className="w-5 h-5 mr-3 text-blue-400" />
+                                            <span>rubeshr1991@gmail.com</span>
+                                        </div>
+                                        <div className="flex items-center">
+                                            <Activity className="w-5 h-5 mr-3 text-blue-400" />
+                                            <span>Scientist II, Vantage Research</span>
+                                        </div>
+                                        <div className="flex items-center">
+                                            <FileText className="w-5 h-5 mr-3 text-blue-400" />
+                                            <span className="text-slate-400 italic">Full CV available upon request</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="border-t border-slate-800 mt-12 pt-8 text-center text-sm text-slate-500">
+                                © {new Date().getFullYear()} Rubesh Raja. All rights reserved. Built with React & Tailwind.
+                            </div>
+                        </div>
+                    </footer>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
