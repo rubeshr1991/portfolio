@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,12 +10,6 @@
     <meta name="keywords" content="Rubesh Raja, QSP, Mathematical Modeling, Systems Biology, Pharmacometrics, HIV, HCV, Vantage Research">
     <meta name="author" content="Rubesh Raja">
     
-    <!-- Social Media / LinkedIn Preview -->
-    <meta property="og:title" content="Rubesh Raja, Ph.D. | QSP & Mechanistic Modeler">
-    <meta property="og:description" content="Scientist II at Vantage Research. Bridging molecular mechanisms and clinical outcomes using mathematical modeling.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://rubeshraja.github.io/portfolio">
-    
     <!-- Dynamic Favicon (DNA Helix) -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧬</text></svg>">
 
@@ -23,37 +17,83 @@
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
     
+    <!-- Tailwind CSS with Dark Mode config -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Merriweather', 'serif'],
+                        mono: ['Fira Code', 'monospace'],
+                    },
+                    colors: {
+                        slate: {
+                            850: '#1e293b', 
+                            900: '#0f172a',
+                            950: '#020617',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Fonts -->
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&family=Fira+Code:wght@400&display=swap');
         
         body {
             font-family: 'Inter', sans-serif;
-            scroll-behavior: smooth;
         }
         h1, h2, h3, .serif {
             font-family: 'Merriweather', serif;
         }
-        .gradient-text {
-            background: linear-gradient(to right, #2563eb, #0891b2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .code-font {
+            font-family: 'Fira Code', monospace;
         }
-        .fade-in {
-            animation: fadeIn 0.8s ease-in;
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
         }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #475569;
+        }
+
+        /* Animations */
+        .fade-in { animation: fadeIn 0.8s ease-in; }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
+        
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        .dark .glass-panel {
+            background: rgba(15, 23, 42, 0.6);
+            border-color: rgba(30, 41, 59, 0.8);
+        }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800">
+<body class="bg-slate-50 text-slate-800 transition-colors duration-300">
     <div id="root"></div>
 
     <script type="text/babel">
-        const { useState, useEffect } = React;
+        const { useState, useEffect, useRef, useMemo } = React;
 
         // --- ICONS ---
         const Icon = ({ children, className, ...props }) => (
@@ -77,10 +117,11 @@
         const Youtube = (props) => <Icon {...props}><path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17"/><path d="m10 15 5-3-5-3z"/></Icon>;
         const PlayCircle = (props) => <Icon {...props}><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></Icon>;
         const GraduationCap = (props) => <Icon {...props}><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></Icon>;
-
+        const Moon = (props) => <Icon {...props}><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></Icon>;
+        const Sun = (props) => <Icon {...props}><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></Icon>;
+        const Search = (props) => <Icon {...props}><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></Icon>;
 
         // --- DATA ---
-        
         const highlights = [
             {
                 id: 1,
@@ -253,57 +294,141 @@
         };
 
         const talks = [
-            {
-                title: "Model-Informed Drug Development: Deciphering Complexity for Better Decisions",
-                event: "Research Talk",
-                videoId: "BYIwajivEfk" 
-            },
-             {
-                title: " HIV: A Switch in the Fight",
-                event: "Made using Notebooklm",
-                videoId: "NuH-CAUv54c" 
-            },
-             {
-                title: "  Decoding the Cell's Program",
-                event: "Made using Notebooklm",
-                videoId: "7SenrVwhQxI" 
-            },
-             {
-                title: " Modeling the Microbial World",
-                event: "Made using Notebooklm",
-                videoId: "FwmATT_FZho" 
-            },
-             {
-                title: "   Model-Informed Drug Development",
-                event: "Made using Notebooklm",
-                videoId: "zHp-uYAt020" 
-            },
-             {
-                title: "  Biology's Blueprint",
-                event: "Made using Notebooklm",
-                videoId: "3B6BmQI1R5U" 
-            }
+            { title: "Model-Informed Drug Development: Deciphering Complexity for Better Decisions", event: "Research Talk", videoId: "BYIwajivEfk" },
+            { title: "HIV: A Switch in the Fight", event: "Made using Notebooklm", videoId: "NuH-CAUv54c" },
+            { title: "Decoding the Cell's Program", event: "Made using Notebooklm", videoId: "7SenrVwhQxI" },
+            { title: "Modeling the Microbial World", event: "Made using Notebooklm", videoId: "FwmATT_FZho" },
+            { title: "Model-Informed Drug Development", event: "Made using Notebooklm", videoId: "zHp-uYAt020" },
+            { title: "Biology's Blueprint", event: "Made using Notebooklm", videoId: "3B6BmQI1R5U" }
         ];
+
+        // --- COMPONENTS ---
+
+        // 1. Dynamic Network Background Component
+        const NetworkBackground = () => {
+            const canvasRef = useRef(null);
+            
+            useEffect(() => {
+                const canvas = canvasRef.current;
+                const ctx = canvas.getContext('2d');
+                let width, height;
+                let particles = [];
+                
+                const resize = () => {
+                    width = window.innerWidth;
+                    height = window.innerHeight;
+                    canvas.width = width;
+                    canvas.height = height;
+                    createParticles();
+                };
+                
+                const createParticles = () => {
+                    const count = Math.min(Math.floor(width * height / 15000), 100);
+                    particles = [];
+                    for(let i=0; i<count; i++) {
+                        particles.push({
+                            x: Math.random() * width,
+                            y: Math.random() * height,
+                            vx: (Math.random() - 0.5) * 0.5,
+                            vy: (Math.random() - 0.5) * 0.5,
+                            size: Math.random() * 2 + 1
+                        });
+                    }
+                };
+                
+                const animate = () => {
+                    ctx.clearRect(0, 0, width, height);
+                    
+                    // Update positions
+                    particles.forEach(p => {
+                        p.x += p.vx;
+                        p.y += p.vy;
+                        
+                        if(p.x < 0 || p.x > width) p.vx *= -1;
+                        if(p.y < 0 || p.y > height) p.vy *= -1;
+                        
+                        // Draw particle
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                        // Use CSS variable colors if possible, else hardcode nice transparent blue
+                        ctx.fillStyle = document.documentElement.classList.contains('dark') ? 'rgba(148, 163, 184, 0.4)' : 'rgba(37, 99, 235, 0.2)';
+                        ctx.fill();
+                    });
+                    
+                    // Draw connections
+                    particles.forEach((p1, i) => {
+                        for(let j=i+1; j<particles.length; j++) {
+                            const p2 = particles[j];
+                            const dx = p1.x - p2.x;
+                            const dy = p1.y - p2.y;
+                            const dist = Math.sqrt(dx*dx + dy*dy);
+                            
+                            if(dist < 150) {
+                                ctx.beginPath();
+                                ctx.moveTo(p1.x, p1.y);
+                                ctx.lineTo(p2.x, p2.y);
+                                const alpha = 1 - dist/150;
+                                ctx.strokeStyle = document.documentElement.classList.contains('dark') ? `rgba(148, 163, 184, ${alpha * 0.15})` : `rgba(37, 99, 235, ${alpha * 0.15})`;
+                                ctx.lineWidth = 1;
+                                ctx.stroke();
+                            }
+                        }
+                    });
+                    
+                    requestAnimationFrame(animate);
+                };
+                
+                window.addEventListener('resize', resize);
+                resize();
+                animate();
+                
+                return () => window.removeEventListener('resize', resize);
+            }, []);
+            
+            return <canvas ref={canvasRef} className="absolute inset-0 z-0 pointer-events-none" />;
+        };
 
         const App = () => {
             const [isMenuOpen, setIsMenuOpen] = useState(false);
             const [activeTab, setActiveTab] = useState("All");
             const [scrolled, setScrolled] = useState(false);
+            const [darkMode, setDarkMode] = useState(false);
+            const [pubSearch, setPubSearch] = useState("");
 
             useEffect(() => {
-                const handleScroll = () => {
-                    setScrolled(window.scrollY > 50);
-                };
+                // Check system preference
+                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    setDarkMode(true);
+                }
+                
+                const handleScroll = () => setScrolled(window.scrollY > 50);
                 window.addEventListener('scroll', handleScroll);
                 return () => window.removeEventListener('scroll', handleScroll);
             }, []);
+
+            useEffect(() => {
+                if (darkMode) {
+                    document.documentElement.classList.add('dark');
+                    document.body.classList.add('bg-slate-900');
+                    document.body.classList.remove('bg-slate-50');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    document.body.classList.remove('bg-slate-900');
+                    document.body.classList.add('bg-slate-50');
+                }
+            }, [darkMode]);
+
+            const toggleTheme = () => setDarkMode(!darkMode);
 
             const filteredHighlights = activeTab === "All" 
                 ? highlights 
                 : highlights.filter(item => item.category === activeTab);
 
+            const filteredPublications = publications.filter(pub => 
+                pub.text.toLowerCase().includes(pubSearch.toLowerCase())
+            );
+
             const navLinks = [
-                { name: "About", href: "#about" },
                 { name: "Experience", href: "#experience" },
                 { name: "Research", href: "#research" },
                 { name: "Publications", href: "#publications" },
@@ -311,48 +436,57 @@
             ];
 
             return (
-                <div className="min-h-screen flex flex-col">
+                <div className={`min-h-screen flex flex-col transition-colors duration-300 ${darkMode ? 'text-slate-100' : 'text-slate-800'}`}>
                     
                     {/* Navigation */}
-                    <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'bg-white/95 backdrop-blur-md shadow-sm py-4' : 'bg-transparent py-6'}`}>
+                    <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? (darkMode ? 'bg-slate-900/90 shadow-slate-800' : 'bg-white/95 shadow-sm') + ' backdrop-blur-md py-4 shadow-lg' : 'bg-transparent py-6'}`}>
                         <div className="container mx-auto px-6 flex justify-between items-center">
-                            <a href="#" className="text-2xl font-bold tracking-tight text-slate-900 font-serif">
-                                Rubesh<span className="text-blue-600">Raja</span>, Ph.D.
+                            <a href="#" className="text-2xl font-bold tracking-tight font-serif flex items-center gap-2">
+                                <span className="text-3xl">🧬</span>
+                                <span>Rubesh<span className="text-blue-600 dark:text-blue-400">Raja</span></span>
                             </a>
 
                             {/* Desktop Nav */}
-                            <div className="hidden md:flex space-x-8">
+                            <div className="hidden md:flex items-center space-x-8">
                                 {navLinks.map((link) => (
                                     <a 
                                         key={link.name} 
                                         href={link.href} 
-                                        className="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors uppercase tracking-wider"
+                                        className="text-sm font-medium hover:text-blue-600 dark:hover:text-blue-400 transition-colors uppercase tracking-wider"
                                     >
                                         {link.name}
                                     </a>
                                 ))}
-                                <a href="#contact" className="px-4 py-2 text-sm font-bold text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors">
+                                <button onClick={toggleTheme} className="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors">
+                                    {darkMode ? <Sun size={20} /> : <Moon size={20} />}
+                                </button>
+                                <a href="#contact" className="px-4 py-2 text-sm font-bold text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors shadow-lg shadow-blue-500/30">
                                     Contact
                                 </a>
                             </div>
 
                             {/* Mobile Nav Button */}
-                            <button 
-                                className="md:hidden text-slate-800"
-                                onClick={() => setIsMenuOpen(!isMenuOpen)}
-                            >
-                                {isMenuOpen ? <X /> : <Menu />}
-                            </button>
+                            <div className="md:hidden flex items-center gap-4">
+                                <button onClick={toggleTheme} className="p-2">
+                                    {darkMode ? <Sun size={20} /> : <Moon size={20} />}
+                                </button>
+                                <button 
+                                    className=""
+                                    onClick={() => setIsMenuOpen(!isMenuOpen)}
+                                >
+                                    {isMenuOpen ? <X /> : <Menu />}
+                                </button>
+                            </div>
                         </div>
 
                         {/* Mobile Menu */}
                         {isMenuOpen && (
-                            <div className="md:hidden absolute top-full left-0 w-full bg-white shadow-lg py-6 px-6 flex flex-col space-y-4 border-t border-slate-100">
+                            <div className={`md:hidden absolute top-full left-0 w-full shadow-xl py-6 px-6 flex flex-col space-y-4 border-t ${darkMode ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-100'}`}>
                                 {navLinks.map((link) => (
                                     <a 
                                         key={link.name} 
                                         href={link.href} 
-                                        className="text-lg font-medium text-slate-800"
+                                        className="text-lg font-medium"
                                         onClick={() => setIsMenuOpen(false)}
                                     >
                                         {link.name}
@@ -363,77 +497,69 @@
                     </nav>
 
                     {/* Hero Section */}
-                    <header className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 px-6 overflow-hidden bg-slate-50">
-                        <div className="absolute inset-0 z-0 opacity-10">
-                             <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
-                                <path d="M0 100 C 20 0 50 0 100 100 Z" fill="url(#gradient)" />
-                                <defs>
-                                    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                                        <stop offset="0%" stopColor="#2563eb" />
-                                        <stop offset="100%" stopColor="#0891b2" />
-                                    </linearGradient>
-                                </defs>
-                            </svg>
-                        </div>
-
+                    <header className="relative min-h-screen flex items-center pt-20 px-6 overflow-hidden">
+                        <NetworkBackground />
+                        
                         <div className="container mx-auto relative z-10 grid md:grid-cols-2 gap-12 items-center">
                             <div className="fade-in">
-                                <div className="inline-flex items-center px-3 py-1 rounded-full bg-blue-100 text-blue-800 text-xs font-bold uppercase tracking-wide mb-6">
+                                <div className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide mb-6 ${darkMode ? 'bg-blue-900/30 text-blue-300 border border-blue-800' : 'bg-blue-100 text-blue-800 border border-blue-200'}`}>
                                     Quantitative Systems Pharmacologist
                                 </div>
-                                <h1 className="text-5xl lg:text-6xl font-bold leading-tight mb-6 text-slate-900 serif">
-                                    Decoding Biology with <span className="gradient-text">Mathematics</span>
+                                <h1 className="text-5xl lg:text-7xl font-bold leading-tight mb-6 serif">
+                                    Decoding Biology with <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-cyan-500">Mathematics</span>
                                 </h1>
-                                <p className="text-lg text-slate-600 mb-8 leading-relaxed max-w-xl">
+                                <p className={`text-lg mb-8 leading-relaxed max-w-xl ${darkMode ? 'text-slate-400' : 'text-slate-600'}`}>
                                     From molecular mechanisms to clinical outcomes. I build predictive models for infectious diseases, metabolic regulation, and therapeutic optimization.
                                 </p>
                                 <div className="flex flex-wrap gap-4">
-                                    <a href="#research" className="px-8 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors shadow-lg shadow-blue-500/30">
-                                        Explore Work
+                                    <a href="#research" className="px-8 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors shadow-lg shadow-blue-500/30 flex items-center">
+                                        View Research <ChevronRight className="ml-2 w-4 h-4" />
                                     </a>
-                                    <a href="#about" className="px-8 py-3 border border-slate-300 bg-white text-slate-700 rounded-lg font-semibold hover:bg-slate-50 transition-colors flex items-center">
-                                        About Me <ChevronRight className="ml-2 w-4 h-4" />
+                                    <a href="#about" className={`px-8 py-3 border rounded-lg font-semibold transition-colors flex items-center ${darkMode ? 'border-slate-700 bg-slate-800 hover:bg-slate-700 text-slate-300' : 'border-slate-300 bg-white hover:bg-slate-50 text-slate-700'}`}>
+                                        About Me
                                     </a>
                                 </div>
                             </div>
                             
-                            {/* Visual Abstract */}
+                            {/* Interactive Visual Abstract */}
                             <div className="relative hidden md:block fade-in" style={{animationDelay: '0.2s'}}>
-                                <div className="w-full h-96 bg-gradient-to-tr from-white to-blue-50 rounded-2xl border border-slate-200 shadow-xl flex items-center justify-center relative overflow-hidden p-8">
-                                    <div className="absolute top-0 right-0 w-64 h-64 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse"></div>
-                                    <div className="absolute bottom-0 left-0 w-64 h-64 bg-cyan-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse" style={{animationDelay: '1s'}}></div>
-                                    
-                                    <div className="grid grid-cols-2 gap-4 z-10 w-full">
-                                        <div className="bg-white p-5 rounded-xl shadow-sm border border-slate-100 transform translate-y-4">
-                                            <div className="flex items-center space-x-2 text-blue-600 mb-2">
-                                                <Activity size={20} />
-                                                <span className="font-bold text-sm">PK/PD</span>
+                                <div className={`w-full aspect-square rounded-full border border-dashed animate-[spin_60s_linear_infinite] absolute inset-0 ${darkMode ? 'border-slate-700' : 'border-slate-300'}`}></div>
+                                <div className={`w-[80%] aspect-square rounded-full border border-dashed animate-[spin_40s_linear_infinite_reverse] absolute top-[10%] left-[10%] ${darkMode ? 'border-slate-700' : 'border-slate-300'}`}></div>
+                                
+                                <div className="glass-panel p-8 rounded-2xl shadow-2xl relative z-10 backdrop-blur-xl border border-white/20">
+                                    <div className="space-y-6">
+                                        <div className="flex items-center space-x-4">
+                                            <div className="p-3 bg-blue-500/10 rounded-lg text-blue-500">
+                                                <Activity size={24} />
                                             </div>
-                                            <div className="space-y-2">
-                                                <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden"><div className="h-full w-3/4 bg-blue-500"></div></div>
-                                                <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden"><div className="h-full w-1/2 bg-blue-400"></div></div>
-                                            </div>
-                                        </div>
-                                        <div className="bg-white p-5 rounded-xl shadow-sm border border-slate-100 transform -translate-y-4">
-                                            <div className="flex items-center space-x-2 text-cyan-600 mb-2">
-                                                <Dna size={20} />
-                                                <span className="font-bold text-sm">Omics Data</span>
-                                            </div>
-                                            <div className="grid grid-cols-4 gap-1">
-                                                {[...Array(8)].map((_,i) => <div key={i} className={`h-4 rounded-sm ${i%2===0 ? 'bg-cyan-100' : 'bg-cyan-500'}`}></div>)}
+                                            <div>
+                                                <div className="text-xs uppercase font-bold text-slate-500">Input</div>
+                                                <div className="font-mono font-bold">PK/PD Data</div>
                                             </div>
                                         </div>
-                                         <div className="bg-white p-5 rounded-xl shadow-sm border border-slate-100 col-span-2">
-                                            <div className="flex items-center space-x-2 text-indigo-600 mb-2">
+                                        <div className="flex justify-center">
+                                            <div className="h-8 w-0.5 bg-slate-300 dark:bg-slate-600"></div>
+                                        </div>
+                                        <div className={`p-4 rounded-xl border ${darkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'}`}>
+                                            <div className="flex items-center space-x-2 text-indigo-500 mb-2">
                                                 <Brain size={20} />
-                                                <span className="font-bold text-sm">Translational Insight</span>
+                                                <span className="font-bold text-sm">Mechanistic Model</span>
                                             </div>
-                                            <div className="flex justify-between items-center text-xs text-slate-400 font-mono mt-2">
-                                                 <span>Input</span>
-                                                 <span className="flex-1 border-t border-dashed border-slate-300 mx-2"></span>
-                                                 <span className="px-2 py-1 bg-indigo-100 text-indigo-700 rounded">Model</span>
-                                                 <span className="flex-1 border-t border-dashed border-slate-300 mx-2"></span>
-                                                 <span>Outcome</span>
+                                            <div className="font-mono text-xs text-slate-500">
+                                                d[Virus]/dt = p*I - c*V <br/>
+                                                d[Drug]/dt = -k*C
+                                            </div>
+                                        </div>
+                                        <div className="flex justify-center">
+                                            <div className="h-8 w-0.5 bg-slate-300 dark:bg-slate-600"></div>
+                                        </div>
+                                        <div className="flex items-center space-x-4">
+                                            <div className="p-3 bg-cyan-500/10 rounded-lg text-cyan-500">
+                                                <Award size={24} />
+                                            </div>
+                                            <div>
+                                                <div className="text-xs uppercase font-bold text-slate-500">Outcome</div>
+                                                <div className="font-mono font-bold">Optimal Dosage</div>
                                             </div>
                                         </div>
                                     </div>
@@ -443,31 +569,31 @@
                     </header>
 
                     {/* About Section */}
-                    <section id="about" className="py-20 bg-white">
+                    <section id="about" className={`py-20 ${darkMode ? 'bg-slate-900' : 'bg-white'}`}>
                         <div className="container mx-auto px-6">
                             <div className="max-w-4xl mx-auto">
-                                <h2 className="text-3xl font-bold mb-8 serif text-slate-900">About Me</h2>
-                                <div className="prose prose-lg text-slate-600">
-                                    <p className="mb-6">
-                                        I am a Scientist II at <strong>Vantage Research</strong> (Chennai), specializing in Quantitative Systems Pharmacology (QSP). My work bridges the gap between molecular mechanisms and clinical trial outcomes.
+                                <h2 className="text-3xl font-bold mb-8 serif">About Me</h2>
+                                <div className={`prose prose-lg ${darkMode ? 'prose-invert text-slate-400' : 'text-slate-600'}`}>
+                                    <p className="mb-6 text-xl font-light leading-relaxed">
+                                        I am a Scientist II at <strong className="text-blue-500">Vantage Research</strong> (Chennai), specializing in Quantitative Systems Pharmacology (QSP). My work bridges the gap between molecular mechanisms and clinical trial outcomes.
                                     </p>
                                     <p className="mb-6">
                                         With a Ph.D. from the <strong>Indian Institute of Science (IISc)</strong> and extensive postdoctoral training at <strong>Purdue University</strong>, I have developed models ranging from viral dynamics (HIV, HCV) to metabolic regulation and synthetic microbiomes. My philosophy is grounded in using mathematics not just to fit data, but to uncover the causal structures of biological systems.
                                     </p>
                                     
                                     <div className="grid md:grid-cols-2 gap-8 my-10">
-                                        <div className="bg-blue-50 p-6 rounded-xl border border-blue-100">
-                                            <h3 className="font-bold text-slate-800 mb-3 flex items-center">
-                                                <Award className="w-5 h-5 mr-2 text-blue-600"/> 
+                                        <div className={`p-6 rounded-xl border ${darkMode ? 'bg-slate-800 border-slate-700' : 'bg-blue-50 border-blue-100'}`}>
+                                            <h3 className="font-bold mb-3 flex items-center">
+                                                <Award className="w-5 h-5 mr-2 text-blue-500"/> 
                                                 Sustainable Science
                                             </h3>
                                             <p className="text-sm">
                                                 "After a rewarding paternity break where I embraced fatherhood, I returned to research with a fresh perspective. I am deeply committed to sustainable science, mentorship, and the belief that work-life balance drives better innovation."
                                             </p>
                                         </div>
-                                        <div className="bg-indigo-50 p-6 rounded-xl border border-indigo-100">
-                                            <h3 className="font-bold text-slate-800 mb-3 flex items-center">
-                                                <Brain className="w-5 h-5 mr-2 text-indigo-600"/> 
+                                        <div className={`p-6 rounded-xl border ${darkMode ? 'bg-slate-800 border-slate-700' : 'bg-indigo-50 border-indigo-100'}`}>
+                                            <h3 className="font-bold mb-3 flex items-center">
+                                                <Brain className="w-5 h-5 mr-2 text-indigo-500"/> 
                                                 Future Directions
                                             </h3>
                                             <p className="text-sm">
@@ -481,26 +607,26 @@
                     </section>
 
                     {/* Experience Roadmap */}
-                    <section id="experience" className="py-20 bg-slate-50 border-t border-slate-200">
+                    <section id="experience" className={`py-20 border-t ${darkMode ? 'bg-slate-950 border-slate-800' : 'bg-slate-50 border-slate-200'}`}>
                         <div className="container mx-auto px-6">
                             <div className="text-center mb-16">
-                                <h2 className="text-3xl font-bold mb-4 serif text-slate-900">Experience Roadmap</h2>
-                                <p className="text-slate-600">A journey through engineering, systems biology, and pharmacology.</p>
+                                <h2 className="text-3xl font-bold mb-4 serif">Experience Roadmap</h2>
+                                <p className="text-slate-500">A journey through engineering, systems biology, and pharmacology.</p>
                             </div>
                             
-                            <div className="max-w-4xl mx-auto space-y-8 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-slate-300 before:to-transparent">
+                            <div className="max-w-4xl mx-auto space-y-8 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-slate-300 before:to-transparent dark:before:via-slate-700">
                                 {experience.map((job, index) => (
-                                    <div key={index} className={`relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group ${index === 0 ? 'is-active' : ''}`}>
-                                        <div className={`flex items-center justify-center w-10 h-10 rounded-full border border-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 ${index === 0 ? 'bg-blue-600 text-white' : 'bg-white text-slate-400'}`}>
+                                    <div key={index} className={`relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group`}>
+                                        <div className={`flex items-center justify-center w-10 h-10 rounded-full border-4 shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 transition-colors ${index === 0 ? 'bg-blue-600 border-blue-100 dark:border-blue-900 text-white' : (darkMode ? 'bg-slate-800 border-slate-900 text-slate-400' : 'bg-white border-white text-slate-400')}`}>
                                             <Briefcase size={16} />
                                         </div>
-                                        <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                                        <div className={`w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-6 rounded-xl border shadow-sm hover:shadow-lg transition-all ${darkMode ? 'bg-slate-900 border-slate-700 hover:border-blue-500' : 'bg-white border-slate-200 hover:border-blue-400'}`}>
                                             <div className="flex flex-col sm:flex-row justify-between items-start mb-2">
-                                                <h3 className="font-bold text-slate-900">{job.role}</h3>
-                                                <span className="text-xs font-mono text-blue-600 bg-blue-50 px-2 py-1 rounded mt-1 sm:mt-0 whitespace-nowrap">{job.period}</span>
+                                                <h3 className={`font-bold ${darkMode ? 'text-slate-200' : 'text-slate-900'}`}>{job.role}</h3>
+                                                <span className="text-xs font-mono text-blue-500 bg-blue-500/10 px-2 py-1 rounded mt-1 sm:mt-0 whitespace-nowrap">{job.period}</span>
                                             </div>
-                                            <p className="text-sm font-semibold text-slate-600 mb-2">{job.org}</p>
-                                            <p className="text-sm text-slate-500 leading-relaxed">{job.desc}</p>
+                                            <p className="text-sm font-semibold text-slate-500 mb-2">{job.org}</p>
+                                            <p className={`text-sm leading-relaxed ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>{job.desc}</p>
                                         </div>
                                     </div>
                                 ))}
@@ -509,12 +635,12 @@
                     </section>
 
                     {/* Research Case Studies */}
-                    <section id="research" className="py-20 bg-white">
+                    <section id="research" className={`py-20 ${darkMode ? 'bg-slate-900' : 'bg-white'}`}>
                         <div className="container mx-auto px-6">
                             <div className="flex flex-col md:flex-row justify-between items-end mb-12">
                                 <div>
-                                    <h2 className="text-3xl font-bold mb-4 serif text-slate-900">Key Projects</h2>
-                                    <p className="text-slate-600 max-w-xl">
+                                    <h2 className="text-3xl font-bold mb-4 serif">Key Projects</h2>
+                                    <p className="text-slate-500 max-w-xl">
                                         Selected works demonstrating the application of mechanistic modeling to real-world biological problems.
                                     </p>
                                 </div>
@@ -523,10 +649,10 @@
                                         <button 
                                             key={tab}
                                             onClick={() => setActiveTab(tab)}
-                                            className={`px-4 py-2 text-sm font-medium rounded-full transition-colors ${
+                                            className={`px-4 py-2 text-sm font-medium rounded-full transition-all ${
                                                 activeTab === tab 
-                                                ? 'bg-slate-900 text-white' 
-                                                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                                                ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/30' 
+                                                : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700'
                                             }`}
                                         >
                                             {tab}
@@ -537,38 +663,34 @@
 
                             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                                 {filteredHighlights.map((item) => (
-                                    <a key={item.id} href={item.link} target="_blank" rel="noopener noreferrer" className="group bg-white rounded-2xl border border-slate-200 p-6 hover:border-blue-500 transition-all shadow-sm hover:shadow-lg flex flex-col relative overflow-hidden">
-                                         {/* Hover Effect Background */}
-                                        <div className="absolute top-0 right-0 p-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                                            <ExternalLink className="w-5 h-5 text-blue-500" />
-                                        </div>
-
+                                    <a key={item.id} href={item.link} target="_blank" rel="noopener noreferrer" className={`group rounded-2xl border p-6 hover:border-blue-500 transition-all shadow-sm hover:shadow-xl hover:-translate-y-1 flex flex-col relative overflow-hidden ${darkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'}`}>
+                                        
                                         <div className="flex justify-between items-start mb-4">
-                                            <div className="p-3 bg-slate-50 rounded-xl text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                                            <div className={`p-3 rounded-xl transition-colors ${darkMode ? 'bg-slate-700 text-blue-400 group-hover:bg-blue-600 group-hover:text-white' : 'bg-slate-50 text-blue-600 group-hover:bg-blue-600 group-hover:text-white'}`}>
                                                 {item.icon}
                                             </div>
-                                            <span className="px-2 py-1 bg-slate-100 text-slate-600 text-[10px] font-bold uppercase rounded-full tracking-wider">
+                                            <span className="px-2 py-1 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-[10px] font-bold uppercase rounded-full tracking-wider">
                                                 {item.category}
                                             </span>
                                         </div>
                                         
-                                        <h3 className="text-xl font-bold mb-2 text-slate-900 group-hover:text-blue-600 transition-colors">
+                                        <h3 className="text-xl font-bold mb-2 group-hover:text-blue-500 transition-colors">
                                             {item.title}
                                         </h3>
                                         <p className="text-xs font-semibold text-slate-500 mb-4 font-mono">
                                             {item.journal}
                                         </p>
                                         
-                                        <p className="text-slate-700 font-medium text-sm mb-3">
+                                        <p className={`font-medium text-sm mb-3 ${darkMode ? 'text-slate-300' : 'text-slate-700'}`}>
                                             {item.summary}
                                         </p>
                                         <p className="text-slate-500 text-sm leading-relaxed mb-6 flex-grow">
                                             {item.details}
                                         </p>
 
-                                        <div className="flex flex-wrap gap-2 pt-4 border-t border-slate-100">
+                                        <div className={`flex flex-wrap gap-2 pt-4 border-t ${darkMode ? 'border-slate-700' : 'border-slate-100'}`}>
                                             {item.tags.map(tag => (
-                                                <span key={tag} className="px-2 py-1 bg-slate-50 text-slate-500 text-xs rounded border border-slate-100">
+                                                <span key={tag} className={`px-2 py-1 text-xs rounded border ${darkMode ? 'bg-slate-900 border-slate-700 text-slate-400' : 'bg-slate-50 text-slate-500 border-slate-100'}`}>
                                                     #{tag}
                                                 </span>
                                             ))}
@@ -580,33 +702,33 @@
                     </section>
 
                     {/* Skills Matrix */}
-                    <section className="py-20 bg-slate-50 border-y border-slate-200">
+                    <section className={`py-20 border-y ${darkMode ? 'bg-slate-950 border-slate-800' : 'bg-slate-50 border-slate-200'}`}>
                         <div className="container mx-auto px-6">
                              <div className="text-center mb-12">
-                                <h2 className="text-3xl font-bold mb-4 serif text-slate-900">Technical Expertise</h2>
+                                <h2 className="text-3xl font-bold mb-4 serif">Technical Expertise</h2>
                             </div>
                             <div className="grid md:grid-cols-3 gap-8">
-                                <div className="bg-white p-8 rounded-xl shadow-sm border border-slate-100">
-                                    <h3 className="text-lg font-bold mb-4 flex items-center text-slate-900"><Database className="mr-2 text-blue-500" size={20}/> Tools</h3>
+                                <div className={`p-8 rounded-xl shadow-sm border ${darkMode ? 'bg-slate-900 border-slate-700' : 'bg-white border-slate-100'}`}>
+                                    <h3 className="text-lg font-bold mb-4 flex items-center"><Database className="mr-2 text-blue-500" size={20}/> Tools</h3>
                                     <ul className="space-y-2">
                                         {skills.tools.map(tool => (
-                                            <li key={tool} className="text-sm text-slate-600 flex items-start"><span className="mr-2 text-blue-400">•</span> {tool}</li>
+                                            <li key={tool} className="text-sm text-slate-500 flex items-start"><span className="mr-2 text-blue-500">•</span> {tool}</li>
                                         ))}
                                     </ul>
                                 </div>
-                                <div className="bg-white p-8 rounded-xl shadow-sm border border-slate-100">
-                                    <h3 className="text-lg font-bold mb-4 flex items-center text-slate-900"><Brain className="mr-2 text-cyan-500" size={20}/> Methodologies</h3>
+                                <div className={`p-8 rounded-xl shadow-sm border ${darkMode ? 'bg-slate-900 border-slate-700' : 'bg-white border-slate-100'}`}>
+                                    <h3 className="text-lg font-bold mb-4 flex items-center"><Brain className="mr-2 text-cyan-500" size={20}/> Methodologies</h3>
                                     <ul className="space-y-2">
                                         {skills.modeling.map(method => (
-                                            <li key={method} className="text-sm text-slate-600 flex items-start"><span className="mr-2 text-cyan-400">•</span> {method}</li>
+                                            <li key={method} className="text-sm text-slate-500 flex items-start"><span className="mr-2 text-cyan-500">•</span> {method}</li>
                                         ))}
                                     </ul>
                                 </div>
-                                <div className="bg-white p-8 rounded-xl shadow-sm border border-slate-100">
-                                    <h3 className="text-lg font-bold mb-4 flex items-center text-slate-900"><Microscope className="mr-2 text-indigo-500" size={20}/> Domains</h3>
+                                <div className={`p-8 rounded-xl shadow-sm border ${darkMode ? 'bg-slate-900 border-slate-700' : 'bg-white border-slate-100'}`}>
+                                    <h3 className="text-lg font-bold mb-4 flex items-center"><Microscope className="mr-2 text-indigo-500" size={20}/> Domains</h3>
                                     <ul className="space-y-2">
                                         {skills.domains.map(domain => (
-                                            <li key={domain} className="text-sm text-slate-600 flex items-start"><span className="mr-2 text-indigo-400">•</span> {domain}</li>
+                                            <li key={domain} className="text-sm text-slate-500 flex items-start"><span className="mr-2 text-indigo-500">•</span> {domain}</li>
                                         ))}
                                     </ul>
                                 </div>
@@ -615,72 +737,85 @@
                     </section>
 
                     {/* Full Publications List */}
-                    <section id="publications" className="py-20 bg-white">
+                    <section id="publications" className={`py-20 ${darkMode ? 'bg-slate-900' : 'bg-white'}`}>
                         <div className="container mx-auto px-6 max-w-5xl">
-                            <div className="flex flex-col md:flex-row md:items-center justify-between mb-10">
+                            <div className="flex flex-col md:flex-row md:items-center justify-between mb-8">
                                 <div className="flex items-center mb-4 md:mb-0">
                                     <BookOpen className="w-8 h-8 text-blue-600 mr-4" />
-                                    <h2 className="text-3xl font-bold serif text-slate-900">Publications</h2>
+                                    <h2 className="text-3xl font-bold serif">Publications</h2>
                                 </div>
-                                <a 
-                                    href="https://scholar.google.com/citations?user=Ums4RtgAAAAJ&hl=en" 
-                                    target="_blank" 
-                                    rel="noopener noreferrer"
-                                    className="inline-flex items-center px-5 py-2.5 bg-white border border-slate-300 rounded-lg text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-blue-600 transition-colors shadow-sm"
-                                >
-                                    <GraduationCap className="w-4 h-4 mr-2" />
-                                    View Google Scholar Profile
-                                </a>
-                            </div>
-                            <div className="space-y-4">
-                                {publications.map((pub, i) => (
-                                    <div key={i} className="pl-6 border-l-2 border-slate-200 hover:border-blue-500 transition-colors py-2 group">
-                                        <p className="text-slate-700 leading-relaxed">
-                                            {pub.text}
-                                        </p>
-                                        <a href={pub.link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center mt-2 text-sm font-semibold text-blue-600 hover:text-blue-800 transition-colors opacity-0 group-hover:opacity-100 transform translate-y-1 group-hover:translate-y-0 transition-all duration-300">
-                                            View Publication <ExternalLink className="w-3 h-3 ml-1" />
-                                        </a>
+                                <div className="flex flex-col sm:flex-row gap-4">
+                                    <div className="relative">
+                                        <Search className="absolute left-3 top-2.5 text-slate-400 w-4 h-4" />
+                                        <input 
+                                            type="text" 
+                                            placeholder="Search papers..." 
+                                            className={`pl-9 pr-4 py-2 text-sm rounded-lg border focus:ring-2 focus:ring-blue-500 focus:outline-none w-64 ${darkMode ? 'bg-slate-800 border-slate-700 text-white placeholder-slate-500' : 'bg-white border-slate-300 text-slate-900'}`}
+                                            onChange={(e) => setPubSearch(e.target.value)}
+                                        />
                                     </div>
-                                ))}
+                                    <a 
+                                        href="https://scholar.google.com/citations?user=Ums4RtgAAAAJ&hl=en" 
+                                        target="_blank" 
+                                        rel="noopener noreferrer"
+                                        className={`inline-flex items-center px-5 py-2 rounded-lg text-sm font-semibold border transition-colors ${darkMode ? 'border-slate-700 hover:bg-slate-800 text-slate-300' : 'border-slate-300 hover:bg-slate-50 text-slate-700'}`}
+                                    >
+                                        <GraduationCap className="w-4 h-4 mr-2" />
+                                        Google Scholar
+                                    </a>
+                                </div>
+                            </div>
+                            
+                            <div className="space-y-4">
+                                {filteredPublications.length > 0 ? filteredPublications.map((pub, i) => (
+                                    <div key={i} className={`p-4 rounded-lg border-l-4 transition-all hover:translate-x-1 ${darkMode ? 'bg-slate-800/50 border-l-blue-600 border-slate-700 hover:bg-slate-800' : 'bg-white border-l-blue-500 border-slate-100 hover:shadow-md'}`}>
+                                        <p className={`leading-relaxed ${darkMode ? 'text-slate-300' : 'text-slate-700'}`}>
+                                            {pub.text.split('Raja, R.').map((part, index, arr) => (
+                                                <span key={index}>
+                                                    {part}
+                                                    {index < arr.length - 1 && <span className="font-bold text-blue-600 dark:text-blue-400">Raja, R.</span>}
+                                                </span>
+                                            ))}
+                                        </p>
+                                        <div className="mt-2 flex justify-end">
+                                            <a href={pub.link} target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-blue-500 hover:text-blue-600 flex items-center">
+                                                DOI LINK <ExternalLink className="w-3 h-3 ml-1" />
+                                            </a>
+                                        </div>
+                                    </div>
+                                )) : (
+                                    <div className="text-center py-10 text-slate-500">No publications found matching your search.</div>
+                                )}
                             </div>
                         </div>
                     </section>
                     
-                    {/* Talks & Media Section (Now properly placed after Publications) */}
-                    <section id="talks" className="py-20 bg-slate-900 text-white">
+                    {/* Talks & Media Section */}
+                    <section id="talks" className="py-20 bg-slate-950 text-white border-t border-slate-900">
                         <div className="container mx-auto px-6">
                             <div className="flex items-center mb-10">
                                 <Youtube className="w-8 h-8 text-red-500 mr-4" />
                                 <div>
-                                    <h2 className="text-3xl font-bold serif text-white">Videos</h2>
+                                    <h2 className="text-3xl font-bold serif text-white">Videos & NotebookLM</h2>
                                 </div>
                             </div>
 
-                            {/* Updated Grid for 4 Videos Per Row */}
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                                 {talks.map((talk, idx) => (
-                                    <div key={idx} className="bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-blue-500 transition-colors group">
+                                    <div key={idx} className="bg-slate-900 rounded-xl overflow-hidden border border-slate-800 hover:border-blue-500 transition-colors group">
                                         {/* Video Aspect Ratio */}
-                                        <div className="aspect-video w-full bg-slate-900 relative">
-                                            {talk.videoId.startsWith("PLACEHOLDER") ? (
-                                                <div className="w-full h-full flex flex-col items-center justify-center bg-slate-800/50">
-                                                    <PlayCircle className="w-8 h-8 text-slate-600 mb-2" />
-                                                    <p className="text-xs text-slate-500 font-mono">ID: {talk.videoId}</p>
-                                                </div>
-                                            ) : (
-                                                <iframe 
-                                                    className="w-full h-full"
-                                                    src={`https://www.youtube.com/embed/${talk.videoId}`} 
-                                                    title={talk.title}
-                                                    frameBorder="0" 
-                                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                                                    allowFullScreen>
-                                                </iframe>
-                                            )}
+                                        <div className="aspect-video w-full bg-slate-950 relative group">
+                                            <iframe 
+                                                className="w-full h-full opacity-90 group-hover:opacity-100 transition-opacity"
+                                                src={`https://www.youtube.com/embed/${talk.videoId}`} 
+                                                title={talk.title}
+                                                frameBorder="0" 
+                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                                allowFullScreen>
+                                            </iframe>
                                         </div>
                                         <div className="p-4">
-                                            <h3 className="text-sm font-bold mb-1 text-slate-200 group-hover:text-blue-400 transition-colors line-clamp-2">{talk.title}</h3>
+                                            <h3 className="text-sm font-bold mb-1 text-slate-200 group-hover:text-blue-400 transition-colors">{talk.title}</h3>
                                             <p className="text-xs text-slate-500">{talk.event}</p>
                                         </div>
                                     </div>
@@ -690,46 +825,46 @@
                     </section>
 
                     {/* Contact / Footer */}
-                    <footer id="contact" className="bg-slate-900 text-slate-300 py-16 mt-auto border-t border-slate-800">
+                    <footer id="contact" className={`py-16 mt-auto border-t transition-colors ${darkMode ? 'bg-slate-950 border-slate-900' : 'bg-slate-900 border-slate-800 text-slate-300'}`}>
                         <div className="container mx-auto px-6">
-                            <div className="grid md:grid-cols-2 gap-12">
+                            <div className="grid md:grid-cols-2 gap-12 text-slate-300">
                                 <div>
                                     <h2 className="text-3xl font-bold text-white mb-6 serif">Let's Collaborate</h2>
                                     <p className="mb-8 leading-relaxed text-slate-400">
                                         I am always open to discussing model-informed drug development, systems biology collaborations, or mentorship opportunities.
                                     </p>
                                     <div className="flex space-x-6">
-                                        <a href="https://www.linkedin.com/in/rubeshraja" target="_blank" className="text-slate-400 hover:text-white transition-colors">
+                                        <a href="https://www.linkedin.com/in/rubeshraja" target="_blank" className="text-slate-400 hover:text-white transition-colors hover:scale-110 transform duration-200">
                                             <Linkedin size={28} />
                                         </a>
-                                        <a href="mailto:rubeshr1991@gmail.com" className="text-slate-400 hover:text-white transition-colors">
+                                        <a href="mailto:rubeshr1991@gmail.com" className="text-slate-400 hover:text-white transition-colors hover:scale-110 transform duration-200">
                                             <Mail size={28} />
                                         </a>
-                                        <a href="https://scholar.google.com/citations?user=Ums4RtgAAAAJ&hl=en" target="_blank" className="text-slate-400 hover:text-white transition-colors">
+                                        <a href="https://scholar.google.com/citations?user=Ums4RtgAAAAJ&hl=en" target="_blank" className="text-slate-400 hover:text-white transition-colors hover:scale-110 transform duration-200">
                                             <GraduationCap size={28} />
                                         </a>
                                     </div>
                                 </div>
-                                <div className="bg-slate-800 p-8 rounded-2xl border border-slate-700">
+                                <div className={`p-8 rounded-2xl border ${darkMode ? 'bg-slate-900 border-slate-800' : 'bg-slate-800 border-slate-700'}`}>
                                     <h3 className="text-xl font-bold text-white mb-4">Contact Info</h3>
-                                    <div className="space-y-4">
-                                        <div className="flex items-center">
-                                            <Mail className="w-5 h-5 mr-3 text-blue-400" />
+                                    <div className="space-y-4 text-sm">
+                                        <div className="flex items-center group">
+                                            <Mail className="w-5 h-5 mr-3 text-blue-500 group-hover:text-white transition-colors" />
                                             <span>rubeshr1991@gmail.com</span>
                                         </div>
-                                        <div className="flex items-center">
-                                            <Activity className="w-5 h-5 mr-3 text-blue-400" />
+                                        <div className="flex items-center group">
+                                            <Activity className="w-5 h-5 mr-3 text-blue-500 group-hover:text-white transition-colors" />
                                             <span>Scientist II, Vantage Research</span>
                                         </div>
                                         <div className="flex items-center">
-                                            <FileText className="w-5 h-5 mr-3 text-blue-400" />
+                                            <FileText className="w-5 h-5 mr-3 text-blue-500" />
                                             <span className="text-slate-400 italic">Full CV available upon request</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div className="border-t border-slate-800 mt-12 pt-8 text-center text-sm text-slate-500">
-                                © {new Date().getFullYear()} Rubesh Raja. All rights reserved. Built with React & Tailwind.
+                                © {new Date().getFullYear()} Rubesh Raja. All rights reserved.
                             </div>
                         </div>
                     </footer>
@@ -742,5 +877,3 @@
     </script>
 </body>
 </html>
-
-
